@@ -1,4 +1,5 @@
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public interface FunStruct<X> {
@@ -6,6 +7,9 @@ public interface FunStruct<X> {
   FunStruct<X> copy();
 
   int size();
+
+  <Y> FunStruct<Y> map(Function<X, Y> mapper)
+    throws NullArgumentException;
 
   FunStruct<X> replaceMap(Predicate<X> replaceIf, X replaceWith)
       throws NullArgumentException;

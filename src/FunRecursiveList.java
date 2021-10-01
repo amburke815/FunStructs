@@ -102,6 +102,11 @@ END-TODO
   }
 
   @Override
+  public <Y> FunStruct<Y> map(Function<X, Y> mapper) throws NullArgumentException {
+    return new FunRecursiveList<>(mapper.apply(first), (FunRecursiveList)rest.map(mapper));
+  }
+
+  @Override
   public FunStruct<X> replaceMap(Predicate<X> replaceIf, X replaceWith)
       throws NullArgumentException {
     return replaceIf.test(first) ?

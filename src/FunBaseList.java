@@ -3,6 +3,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+
 public class FunBaseList<X> implements FunList<X> {
 
   FunBaseList() {
@@ -49,7 +50,6 @@ public class FunBaseList<X> implements FunList<X> {
     return new FunBaseList<>();
   }
 
-
   @Override
   public FunList<X> filter(Predicate<X> keepIf) {
     return new FunBaseList<>();
@@ -81,6 +81,11 @@ public class FunBaseList<X> implements FunList<X> {
   }
 
   @Override
+  public <Y> FunStruct<Y> map(Function<X, Y> mapper) throws NullArgumentException {
+    return new FunBaseList<>();
+  }
+
+  @Override
   public FunStruct<X> replaceMap(Predicate<X> replaceIf, X replaceWith)
       throws NullArgumentException {
     return new FunBaseList<>();
@@ -93,12 +98,12 @@ public class FunBaseList<X> implements FunList<X> {
 
   @Override
   public boolean andMap(Predicate<X> predicate) throws NullArgumentException {
-    return false;
+    return true;
   }
 
   @Override
   public boolean contains(X amIContained) throws NullArgumentException {
-    return true;
+    return false;
   }
 
   @Override
@@ -116,4 +121,5 @@ public class FunBaseList<X> implements FunList<X> {
       throws NullArgumentException {
     return base;
   }
+
 }
