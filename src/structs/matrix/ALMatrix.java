@@ -191,7 +191,7 @@ public class ALMatrix<X> implements FunMatrix<X> {
     try {
       return entries.get(row).get(col);
     } catch (IndexOutOfBoundsException e) {
-      throw new IllegalArgumentException("Row " + row + " annd/or column " + col + " out of bounds "
+      throw new IllegalArgumentException("Row " + row + " and/or column " + col + " out of bounds "
           + "for matrix with height " + height() + " and width " + width());
     }
   }
