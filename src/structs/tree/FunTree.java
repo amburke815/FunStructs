@@ -1,5 +1,9 @@
+package structs.tree;
+
 import java.util.List;
 import java.util.function.BiFunction;
+import structs.FunStruct;
+import structs.utils.NullArgumentException;
 
 public interface FunTree<X> extends FunStruct<X> {
 

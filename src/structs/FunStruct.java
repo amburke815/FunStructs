@@ -1,6 +1,10 @@
+package structs;
+
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import structs.utils.EFoldMode;
+import structs.utils.NullArgumentException;
 
 public interface FunStruct<X> {
 

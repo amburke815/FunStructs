@@ -1,7 +1,12 @@
+package structs.list;
+
 import java.util.Comparator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import structs.utils.EFoldMode;
+import structs.FunStruct;
+import structs.utils.NullArgumentException;
 
 
 public class FunBaseList<X> implements FunList<X> {
@@ -16,7 +21,7 @@ public class FunBaseList<X> implements FunList<X> {
 
   @Override
   public FunList<X> appendToEnd(X toAppend) throws IllegalArgumentException {
-    return appendToFront(toAppend); // TODO. May want to change this, reason for having it noted in FunList
+    return appendToFront(toAppend); // TODO. May want to change this, reason for having it noted in structs.list.FunList
   }
 
   @Override
@@ -119,7 +124,8 @@ public class FunBaseList<X> implements FunList<X> {
   @Override
   public <Y> Y fold(BiFunction<X, Y, Y> folder, Y base, EFoldMode biFoldMode)
       throws NullArgumentException {
-    return base;
+    return null;
   }
+
 
 }

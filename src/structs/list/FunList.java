@@ -1,7 +1,10 @@
+package structs.list;
+
 import java.util.Comparator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import structs.FunStruct;
 
 public interface FunList<X> extends FunStruct<X> {
 
@@ -9,8 +12,8 @@ public interface FunList<X> extends FunStruct<X> {
       throws IllegalArgumentException;
 
   /**
-   * Appends the new element to the end of a non-empty list.
-   * If an empty list calls this method then a list is returned with this added element, then the empty list.
+   * Appends the new element to the end of a non-empty structs.list.
+   * If an empty structs.list calls this method then a structs.list is returned with this added element, then the empty structs.list.
    * @param toAppend
    * @return
    * @throws IllegalArgumentException

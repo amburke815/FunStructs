@@ -1,31 +1,34 @@
+package structs.list;
+
 import java.util.Comparator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import structs.utils.EFoldMode;
+import structs.FunStruct;
+import structs.utils.NullArgumentException;
+import structs.utils.Utils;
 
 public class FunRecursiveList<X> implements FunList<X> {
 
   //!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~members and ctors~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
 
-
-
   private final X first;
   private final FunList<X> rest;
 
-
   FunRecursiveList(X first, FunList<X> rest) {
-    this.first = U.notNull(first);
-    this.rest = U.notNull(rest);
+    this.first = Utils.notNull(first);
+    this.rest = Utils.notNull(rest);
   }
 
   FunRecursiveList(X first) {
     this(first, new FunBaseList<>());
   }
 
-  //!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~overriden from FunList~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
+  //!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~overriden from structs.list.FunList~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
   @Override
   public FunList<X> appendToFront(X toAppend) throws IllegalArgumentException {
-    return new FunRecursiveList<>(U.notNull(toAppend), (FunList<X>) this.copy());
+    return new FunRecursiveList<>(Utils.notNull(toAppend), (FunList<X>) this.copy());
   }
 
   @Override
@@ -89,7 +92,7 @@ END-TODO
     return null; // TODO
   }
 
-  //!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~overriden from FunStruct~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
+  //!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~overriden from structs.FunStruct~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
 
   @Override
   public FunStruct<X> copy() {
@@ -144,8 +147,9 @@ END-TODO
   @Override
   public <Y> Y fold(BiFunction<X, Y, Y> folder, Y base, EFoldMode biFoldMode)
       throws NullArgumentException {
-    return null; // TODO
+    return null;
   }
+
 
   //!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~private helpers~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
 

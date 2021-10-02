@@ -1,4 +1,6 @@
-public class U { // TODO rename
+package structs.utils;
+
+public class Utils { // TODO rename
 
   public static <X> X notNull(X toCheck)
       throws IllegalArgumentException {
