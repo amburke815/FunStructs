@@ -1,9 +1,12 @@
 package structs.matrix;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -120,6 +123,7 @@ public class ALMatrix<X> implements FunMatrix<X> {
     return new ALMatrix<>(mapped);
   }
 
+
   @Override
   public FunStruct<X> replaceMap(Predicate<X> replaceIf, X replaceWith)
       throws NullArgumentException {
@@ -191,7 +195,7 @@ public class ALMatrix<X> implements FunMatrix<X> {
     try {
       return entries.get(row).get(col);
     } catch (IndexOutOfBoundsException e) {
-      throw new IllegalArgumentException("Row " + row + " and/or column " + col + " out of bounds "
+      throw new IllegalArgumentException("Row " + row + " anzd/or column " + col + " out of bounds "
           + "for matrix with height " + height() + " and width " + width());
     }
   }
@@ -206,17 +210,60 @@ public class ALMatrix<X> implements FunMatrix<X> {
   @Override
   public FunMatrix<X> subMatrix(int firstRowIncl, int lastRowIncl, int firstColIncl,
       int lastColIncl) throws IllegalArgumentException {
-    return null;
+    if (firstRowIncl == 0 && lastRowIncl == height() - 1
+        && firstColIncl == 0 && lastColIncl == width()) {
+      return (FunMatrix<X>) copy(); // fast solution --> dimensions yield same matrix
+    }
+
+    List<List<X>> subMatrixList = new ArrayList<>();
+
+    for (int i = firstRowIncl; i <= lastRowIncl; i++) {
+      List<X> thisRow = new ArrayList<>();
+      for (int j = firstColIncl; j <= lastColIncl; j++) {
+        thisRow.add(getElementAt(i, j));
+      }
+      subMatrixList.add(thisRow);
+    }
+
+    return new ALMatrix<>(subMatrixList);
   }
 
   @Override
   public FunMatrix<X> subMatrix(int lastRowIncl, int lastColIncl) throws IllegalArgumentException {
-    return null;
+    return subMatrix(0, lastRowIncl, 0, lastColIncl);
   }
 
   @Override
   public FunMatrix<X> reflectAcross(EReflectionAxis reflectionAxis) throws NullArgumentException {
-    return null;
+    return mapIndex((i, j) -> (reflectionsLambdaMap.get(reflectionAxis).apply(i,j)));
+  }
+
+  private final Map<EReflectionAxis, BiFunction<Integer, Integer, X>> reflectionsLambdaMap
+      = initReflectionsMap();
+
+  private Map<EReflectionAxis, BiFunction<Integer, Integer, X>> initReflectionsMap() {
+    Map<EReflectionAxis, BiFunction<Integer, Integer, X>> reflectionsMap = new HashMap<>();
+
+    // a reflection across the vertical axis running through the center of the matrix
+    reflectionsMap
+        .putIfAbsent(EReflectionAxis.Y,
+            (i, j) -> (getElementAt(i, width() - 1 - j)));
+
+    // a reflection across the vertical axis running through the center of the matrix
+    reflectionsMap.putIfAbsent(EReflectionAxis.X,
+        (i, j) -> (getElementAt(height() - 1 - i, j)));
+
+    // a reflection across the diagonal axis y = x, running from the bottom left of the matrix to
+    // its top right
+    reflectionsMap.putIfAbsent(EReflectionAxis.Y_EQUALS_X,
+        (i, j) -> (getElementAt(height() - 1 - i, width() - 1 - j))); // TODO check this
+
+    // a reflection across the diagonal axis y = -x, running from the top left of the matrix to its
+    // bottom right
+    reflectionsMap.putIfAbsent(EReflectionAxis.Y_EQUALS_NEGATIVE_X,
+        (i, j) -> (getElementAt(height() - 1 - i, -1 * (width() - 1 - j))));
+
+    return reflectionsMap;
   }
 
   @Override
@@ -231,22 +278,38 @@ public class ALMatrix<X> implements FunMatrix<X> {
 
   @Override
   public int width() {
-    return 0;
+    return entries.size() == 0 ? 0 : entries.get(0).size(); // if non-empty, the first row is
+    // guaranteed to be the width of the matrix thanks to the invariant that all rows are of the
+    // same size
   }
 
   @Override
   public int height() {
-    return 0;
+    return entries.size();
   }
 
   @Override
   public List<X> extractRow(int rowNum) throws IllegalArgumentException {
-    return null;
+    if (rowNum < 0 || rowNum > height() - 1)
+      throw new IllegalArgumentException("Illegal row number: " + rowNum + " out of bounds for"
+          + " matrix of height " + height());
+
+    return entries.get(rowNum);
   }
 
   @Override
   public List<X> extractCol(int colNum) throws IllegalArgumentException {
-    return null;
+    if (colNum < 0 || colNum > width() - 1)
+      throw new IllegalArgumentException("Illegal column number: " + " out of bounds for"
+          + " matrix of width " + width());
+
+    List<X> extractedCol = new ArrayList<>();
+
+    for (int i = 0; i < height(); i++) {
+      extractedCol.add(getElementAt(i, colNum));
+    }
+
+    return extractedCol;
   }
 
   @Override
@@ -260,5 +323,21 @@ public class ALMatrix<X> implements FunMatrix<X> {
       BiFunction<Z, Z, A> vectorSumOperation, FunMatrix<Y> toMultiplyWith)
       throws NullArgumentException {
     return null;
+  }
+
+  @Override
+  public <Y> FunMatrix<Y> mapIndex(BiFunction<Integer, Integer, Y> indexMapper)
+      throws NullArgumentException {
+    List<List<Y>> mapped = new ArrayList<>();
+
+    for (int i = 0; i < height(); i++) {
+      List<Y> thisRow = new ArrayList<>();
+      for (int j = 0; j < width(); j++) {
+        thisRow.add(indexMapper.apply(i, j));
+      }
+      mapped.add(thisRow);
+    }
+
+    return new ALMatrix<>(mapped);
   }
 }

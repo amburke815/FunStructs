@@ -50,4 +50,7 @@ public interface FunMatrix<X> extends FunStruct<X> {
       BiFunction<Z, Z, A> vectorSumOperation, FunMatrix<Y> toMultiplyWith)
     throws NullArgumentException;
 
+  <Y> FunMatrix<Y> mapIndex(BiFunction<Integer, Integer, Y> indexMapper)
+    throws NullArgumentException;
+
 }
